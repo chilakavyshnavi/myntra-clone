@@ -7,46 +7,164 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>www.myntra.com</title>
     <!-- ALL CSS LINK -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="navbar.css">
     <!-- FONT-AWESOME -->
     <script src="https://kit.fontawesome.com/72215895a8.js" crossorigin="anonymous"></script>
     <style>
-        #section_1 img{
+        #section_1 img {
             width: unset;
         }
-        ol > li > span{
+        ol > li > span {
             color: #505050;
             font-weight: 700;
-        }         
+        }
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            #nav_bar {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+            }
+            #nav_bar.active {
+                display: flex;
+            }
+            #menu_toggle {
+                display: block;
+                cursor: pointer;
+            }
+        }
+        #menu_toggle {
+            display: none;
+        }
+        /* Active link styles */
+        #nav_bar li a.active {
+            color: red;
+        }
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        header.dark-mode {
+            background-color: #1f1f1f;
+        }
+        #nav_bar.dark-mode li a {
+            color: #ffffff;
+        }
+        /* Back to Top button styles */
+        #back_to_top {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+        }
+        #back_to_top.show {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <!-- HEADER MENU SECTION -->
     <header>
         <div id="logo">
-        <img src="logo-myntra-41466.png" alt="brandLogo" id="landingPage">
+            <img src="logo-myntra-41466.png" alt="brandLogo" id="landingPage">
         </div>
+        <div id="menu_toggle"><i class="fa-solid fa-bars"></i></div>
         <ul id="nav_bar">
-            <li id="megamenu_container"><a href="#">men</a></li>
-            <li><a href="#">women</a></li>
-            <li><a href="#">kids</a></li>
-            <li><a href=" #">home & living</a></li>
-            <li><a href="#">beauty</a></li>
-            <li id="studio"><a href="#">studio</a><span>new</span></li>
-        </ul> 
+            <li id="megamenu_container"><a href="#men">men</a></li>
+            <li><a href="#women">women</a></li>
+            <li><a href="#kids">kids</a></li>
+            <li><a href="#home">home & living</a></li>
+            <li><a href="#beauty">beauty</a></li>
+            <li id="studio"><a href="#studio">studio</a><span>new</span></li>
+        </ul>
         <div id="search">
             <input type="text" id="search_bar" placeholder="Search for products, brands and more">
             <i class="fa-solid fa-magnifying-glass" id="search_icon"></i>
         </div>
-        <div id="right_icon">  
-                <div class="bottom">
-                    <i class="fa-regular fa-user fa_user" id="profile"></i>
-                    <i class="fa-regular fa-heart fa_wishlist"></i>
-                    <i class="fa-solid fa-bag-shopping fa_cart"></i>
-                </div>                     
-    </header>                    
+        <div id="right_icon">
+            <div class="bottom">
+                <i class="fa-regular fa-user fa_user" id="profile"></i>
+                <i class="fa-regular fa-heart fa_wishlist"></i>
+                <i class="fa-solid fa-bag-shopping fa_cart"></i>
+            </div>
+        </div>
+        <div id="dark_mode_toggle">
+            <i class="fa-solid fa-moon"></i>
+        </div>
+    </header>
+
+    <!-- Content sections -->
+    <section id="men" style="height: 600px; background-color: #f1f1f1;">Men Section</section>
+    <section id="women" style="height: 600px; background-color: #e1e1e1;">Women Section</section>
+    <section id="kids" style="height: 600px; background-color: #d1d1d1;">Kids Section</section>
+    <section id="home" style="height: 600px; background-color: #c1c1c1;">Home & Living Section</section>
+    <section id="beauty" style="height: 600px; background-color: #b1b1b1;">Beauty Section</section>
+    <section id="studio" style="height: 600px; background-color: #a1a1a1;">Studio Section</section>
+
+    <!-- Back to Top button -->
+    <button id="back_to_top"><i class="fa-solid fa-arrow-up"></i></button>
+
+    <script>
+        document.getElementById('menu_toggle').addEventListener('click', function() {
+            document.getElementById('nav_bar').classList.toggle('active');
+        });
+
+        // Highlight active section
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('#nav_bar li a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - sectionHeight / 3) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Show/Hide Back to Top button
+            const backToTopButton = document.getElementById('back_to_top');
+            if (window.scrollY > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('dark_mode_toggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            document.querySelector('header').classList.toggle('dark-mode');
+            document.getElementById('nav_bar').classList.toggle('dark-mode');
+        });
+
+        // Scroll to top functionality
+        const backToTopButton = document.getElementById('back_to_top');
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
 </body>
-    
 
-
-           
+</html>
